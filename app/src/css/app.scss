@@ -10,6 +10,10 @@ body{
     font-size: 12px;
 }
 
+a{
+    color: $primary-color;
+}
+
 *{
     box-sizing: border-box;
 }
@@ -306,5 +310,101 @@ body{
     margin: 20px  0;
     button{
         margin:10px 0;
+    }
+}
+
+.app-page-download{
+    .app-card{
+        @media(min-width: $screen-sm){
+            width: 400px;
+        }
+        margin: 0 auto;
+    }
+}
+.app-top-header{
+    text-align: center;
+    color: white;
+    h1{
+        margin: 0;
+        padding: 0;
+        font-size: 50px;
+        font-weight: 600;
+    }  
+    margin-bottom: 20px;
+}
+
+.app-download-icon{
+    text-align: center;
+    i{
+        font-size: 50px;
+        color: $body-text-color;
+        text-align: center;
+        display: inline-block;
+        border: 1px solid $body-text-color;
+        width: 100px;
+        height: 100px;
+        line-height: 100px;
+        border-radius: 50%;
+    }
+}
+
+.app-download-message{
+    margin-top: 30px;
+    h2{
+        font-size: 20px;
+        margin: 20px 0;
+    }
+    ul{
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        li{
+            margin: 0 10px 0 0;
+            padding: 0 0 0 10px;
+            display: inline-block;
+            position: relative;
+            &:before{
+                position: absolute;
+                display: block;
+                top: 5px;
+                left: 0;
+                content: '';
+                width: 4px;
+                height: 4px;
+                background-color: $body-text-color;
+                border-radius: 50%;
+            }
+            &:first-child{
+                padding: 0;
+                &:before{
+                    display: none;
+                }
+            }
+        }
+    }
+}
+
+.app-download-file-list{
+    margin: 30px 0;
+    .app-download-file-list-item{
+        border-bottom: 1px solid rgba(227,234,248,1);
+        padding: 10px 5px;
+        display: flex;
+        .filename{
+        flex-grow: 1;
+
+        }
+        .download-action{
+            a{
+                color: $primary-color;
+                text-decoration: none;
+            }
+        }
+    }
+}
+
+.app-download-action{
+    button{
+        padding: 10px 0;
     }
 }
