@@ -40,13 +40,13 @@ class Home extends Component{
                 return <HomeForm 
                 
                 onUploadEvent={(event)=>{
-                    /*
-                    let componentNameToSet = componentName;
+                    
+                    let data = this.state.data;
                     if(_.get(event, 'type') === 'success'){
-                        componentNameToSet = 'HomeUploadSent'
+                        data = _.get(event, 'payload');
                     }
-                    */
                     this.setState({
+                        data:data,
                         uploadEvent: event,
                         componentName: (_.get(event, 'type')==='success') ? 'HomeUploadSent': this.state.componentName,
                         });

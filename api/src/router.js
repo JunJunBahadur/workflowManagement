@@ -100,6 +100,41 @@ class AppRouter {
                 });
             })
         });
+
+
+        //Routing for post detail /api/posts/:id
+        app.get('/api/posts/:id', (req,res) => {
+            const postId = _.get(req, 'params.id');
+            let postObjectId = null;
+            try{
+                postObjectId = new ObjectId(postId);
+            }
+            catch(err){
+                return res.status(404).json({error: {message: 'File not found.'}});
+            }
+
+            db.collection('posts').find({_id: postObjectId}).limit(1).toArray((err, results) => {
+                let result = _.get(results, '[0]');
+
+                if(err || !result){
+                    return res.status(404).json({error: {message: 'File not found.'}});
+                }
+
+                const fileIds = _.get(result, 'files', []);
+                //return res.json((fileIds));
+                //{$in: fileIds}
+
+                db.collection('files').find({_id: {$in: Object.values(fileIds)}}).toArray((err,files) => {
+
+                    console.log('files:',files)
+                    if(err || !files || !files.length){
+                        return res.status(404).json({error: {message: 'File x found.'}});
+                    }
+                    result.files = files;
+                    return res.json(result);
+                });
+            });
+        });
     }
 }
 
