@@ -12,6 +12,7 @@ body{
 
 a{
     color: $primary-color;
+    text-decoration: none;
 }
 
 *{
@@ -405,6 +406,12 @@ a{
 
 .app-download-action{
     button{
-        padding: 10px 0;
+        margin: 10px 0;
+    }
+}
+
+.app-top-header{
+    h1{
+        cursor: pointer;
     }
 }

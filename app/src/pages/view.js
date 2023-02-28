@@ -3,6 +3,15 @@ import { useParams } from 'react-router-dom';
 import _ from 'lodash';
 import { getDownloadInfo } from '../helpers/download';
 import { apiUrl } from '../config';
+import { betterNumber } from '../helpers/index'
+import { useNavigate } from "react-router-dom";
+
+
+function WithNavigate(props) {
+    let navigate = useNavigate();
+    return <View {...props} navigate={navigate} />
+}
+
 
 function withParams(Component) {
     return props => <Component {...props} params={useParams()} />;
@@ -11,6 +20,12 @@ function withParams(Component) {
 class View extends Component{
     constructor(props){
         super(props);
+
+        this.state = {
+            post: null
+        }
+
+        this.getTotalDownloadSize = this.getTotalDownloadSize.bind(this);
     }
 
     componentDidMount(){
@@ -26,11 +41,31 @@ class View extends Component{
         })
     }
 
+    getTotalDownloadSize(){
+        const {post} = this.state;
+        let total = 0;
+
+        const files = _.get(post, 'files', []);
+        _.each(files, (file)=> {
+            total = total + _.get(file, 'size', 0);
+        })
+        
+        return betterNumber(total);
+    }
+
     render(){
+
+        const {post} = this.state;
+        const files = _.get(post, 'files', []);
+        const postId = _.get(post, '_id', null);
+        const totalSize = this.getTotalDownloadSize();
+
         return(
             <div className='app-page-download'>
             <div className='app-top-header'>
-                <h1><i className="icon-paper-plane" />SHARE</h1>
+                <h1 onClick={() => {
+                    this.props.navigate('/')
+                }}><i className="icon-paper-plane" />SHARE</h1>
             </div>
                 <div className='app-card app-card-download'>
                     <div className='app-card-content'>
@@ -42,24 +77,26 @@ class View extends Component{
                             <div className='app-download-message app-text-center'>
                                 <h2>Ready to download</h2>
                                 <ul>
-                                    <li>3 files</li>
-                                    <li>5M</li>
+                                    <li>{files.length} files</li>
+                                    <li>{totalSize}</li>
                                     <li>Expires in 30 days</li>
                                 </ul>
                             </div>
                             <div className='app-download-file-list'>
-                                <div className='app-download-file-list-item'>
-                                    <div className='filename'>ABC.jpg</div>
-                                    <div className='download-action'><a href={`${apiUrl}/download/`}>Download</a></div>
-                                </div>
-                                <div className='app-download-file-list-item'>
-                                    <div className='filename'>ABC.jpg</div>
-                                    <div className='download-action'><a href={`${apiUrl}/download/`}>Download</a></div>
-                                </div>
+                                {
+                                    files.map((file, index) => {
+                                        return(
+                                            <div key={index} className='app-download-file-list-item'>
+                                                <div className='filename'>{_.get(file, 'originalName')}</div>
+                                                <div className='download-action'><a href={`${apiUrl}/download/${_.get(file, '_id')}`}>Download</a></div>
+                                            </div>
+                                        )
+                                    })
+                                }
                             </div>
                             
                             <div className='app-download-action app-form-action'>
-                                <button className='app-button primary' type='button'>Download All</button>
+                                <a href={`${apiUrl}/posts/${postId}/download`} className='app-button primary' >Download All</a>
                                 <button className='app-button' type='button'>Share</button>
                             </div>
                         </div>
@@ -70,4 +107,5 @@ class View extends Component{
     }
 }
 
-export default withParams(View);
+export default withParams(WithNavigate);
+//export default withParams(View);
