@@ -5,6 +5,8 @@ import File from './models/file';
 import { ObjectId } from 'mongodb';
 import Post from './models/post';
 import FileArchiver from './archiver';
+//import Email from './email';
+
 
 class AppRouter {
     constructor(app) {
@@ -57,8 +59,21 @@ class AppRouter {
 
                     db.collection('posts').insertOne(post, (err, result) => {
                         if(err){
-                            return res.status(503).json({error: {message: "Your uploac could not be saved."}});
+                            return res.status(503).json({error: {message: "Your upload could not be saved."}});
                         }
+                        //implement email sending to user with download link.
+
+                        //send email
+                        /*
+                        const sendEmail = new Email(app);
+
+                        sendEmail.sendDownloadLink(post, (err, info) => {
+                            if(err){
+                                console.log("An error sending email notify download link.", err);
+                            }
+                        })
+                        */
+                        // callback to react app with post detail
                         return res.json(post);
                     });
 

@@ -6,8 +6,13 @@ import bodyParser from 'body-parser';
 import multer from 'multer';
 import path from 'path';
 
-import {connect} from "./database";
+import { connect } from "./database";
 import AppRouter from './router';
+//import nodemailer from 'nodemailer'
+//import { smtp } from './config'
+
+// Setup Email
+//let email = nodemailer.createTransport(smtp);
 
 // File storage config
 const storageDir = path.join(__dirname, '..', 'storage');
@@ -40,6 +45,7 @@ app.use(bodyParser.json({
 app.set('root', __dirname);
 app.set('storageDir', storageDir);
 app.set('upload', upload);
+//app.email = email;
 
 // Database connection
 connect((err,client)=> {
